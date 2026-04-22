@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Мультиагентная система для SMM · Aivion</title>
-  <meta name="description" content="Кейс о том, как мы сократили производство Telegram-поста с ~60 минут до ~2–3 минут с мультиагентной архитектурой."/>
+  <title>AI-система для Call Center · Aivion</title>
+  <meta name="description" content="Кейс о том, как мы автоматизировали обработку обращений в call center и сократили время ответа с 9 минут до 45 секунд."/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
@@ -84,16 +84,14 @@
     .flow-step h3{font-size:20px;margin-bottom:6px;color:var(--text)}
     .flow-step p{color:var(--muted)}
 
-    .roadmap-vertical{position:relative;display:flex;flex-direction:column;gap:20px;margin-top:18px;padding:12px 0;overflow:hidden}
-    .roadmap-vertical::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:2px;transform:translateX(-50%);background:rgba(255,255,255,.25);z-index:0}
-    .roadmap-vertical::after{content:"";position:absolute;left:50%;top:0;width:14px;height:14px;border-radius:50%;background:var(--accent);transform:translate(-50%,0);box-shadow:0 0 0 7px rgba(255,215,0,.14);z-index:0;animation:timeline-progress 4.5s ease-in-out infinite}
-    .roadmap-item{position:relative;display:grid;grid-template-columns:1fr 90px 1fr;align-items:center;min-height:156px;opacity:0;transform:translateY(20px);transition:opacity .45s ease,transform .45s ease;z-index:1}
+    .roadmap-vertical{position:relative;display:flex;flex-direction:column;gap:18px;margin-top:24px;padding:8px 0 8px 12px}
+    .roadmap-vertical::before{content:"";position:absolute;left:27px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,rgba(255,215,0,.2),rgba(255,255,255,.25),rgba(255,215,0,.2));z-index:0}
+    .roadmap-item{position:relative;display:grid;grid-template-columns:56px 1fr;align-items:flex-start;gap:16px;min-height:auto;opacity:0;transform:translateY(20px);transition:opacity .45s ease,transform .45s ease;z-index:1}
     .roadmap-item.visible{opacity:1;transform:translateY(0)}
-    .roadmap-content{max-width:310px}
-    .roadmap-item.left .roadmap-content{grid-column:1;justify-self:end;text-align:right;padding-right:18px}
-    .roadmap-item.right .roadmap-content{grid-column:3;justify-self:start;text-align:left;padding-left:18px}
-    .roadmap-marker{grid-column:2;justify-self:center;width:34px;height:34px;border-radius:50%;border:2px solid var(--accent);background:#000;box-shadow:0 0 0 8px rgba(255,215,0,.08);position:relative;z-index:1}
-    .roadmap-item h4{font-size:18px;color:var(--accent);margin-bottom:6px}
+    .roadmap-content{max-width:none;border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:18px;background:rgba(44,44,44,.42)}
+    .roadmap-marker{grid-column:1;justify-self:center;width:30px;height:30px;border-radius:50%;border:2px solid var(--accent);background:#000;box-shadow:0 0 0 7px rgba(255,215,0,.08);position:relative;z-index:1;margin-top:12px}
+    .roadmap-marker::after{content:attr(data-step);position:absolute;left:50%;top:50%;transform:translate(-50%,-52%);font-size:11px;font-weight:700;color:var(--accent)}
+    .roadmap-item h4{font-size:19px;color:var(--accent);margin-bottom:6px}
     .roadmap-item p{color:var(--text);font-size:15px;line-height:1.7}
     .expand-btn{margin-top:10px;border:1px solid rgba(255,255,255,.24);background:rgba(255,255,255,.04);color:var(--text);font-size:13px;line-height:1;padding:10px 18px;border-radius:999px;cursor:pointer;transition:background .2s,border-color .2s,opacity .2s;letter-spacing:.06em;text-transform:uppercase;font-weight:600}
     .expand-btn:hover{border-color:var(--stroke-accent);background:rgba(255,215,0,.12);opacity:.92}
@@ -101,20 +99,14 @@
     .step-dropdown p{font-size:13px;line-height:1.6;color:#D1D5DB;background:rgba(20,20,20,.95);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:12px 14px}
     .step-dropdown.open{max-height:220px;opacity:1;margin-top:10px}
 
-    .architecture-system{position:relative;max-width:920px;margin:28px auto 0}
+    .architecture-system{position:relative;max-width:none;width:100%;margin:28px auto 0}
     .architecture-road{display:none}
-    .architecture-agents{position:relative;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;z-index:3}
-    .agent-node{position:relative;width:100%;padding:18px 20px;border:1px solid rgba(255,255,255,.32);border-radius:14px;background:transparent;box-shadow:none;opacity:0;transform:translateY(26px) scale(.98);transition:opacity .55s ease,transform .55s ease}
+    .architecture-agents{position:relative;display:grid;grid-template-columns:repeat(2,minmax(320px,1fr));gap:18px;z-index:3}
+    .agent-node{position:relative;width:100%;padding:22px 24px;border:1px solid rgba(255,255,255,.32);border-radius:14px;background:rgba(18,18,18,.65);box-shadow:none;opacity:0;transform:translateY(26px) scale(.98);transition:opacity .55s ease,transform .55s ease}
     .agent-node.visible{opacity:1;transform:translateY(0) scale(1)}
     .agent-node h4{font-size:16px;color:var(--accent);margin-bottom:4px}
     .agent-node p{font-size:13px;line-height:1.6;color:var(--text);margin:0}
     .agent-node--tl,.agent-node--bl,.agent-node--tr,.agent-node--br{top:auto;left:auto;right:auto}
-    @keyframes timeline-progress {
-      0% { top: 0; opacity: .7; }
-      50% { opacity: 1; }
-      100% { top: calc(100% - 14px); opacity: .7; }
-    }
-
     .tech-row{display:flex;flex-wrap:wrap;gap:12px 22px}
     .tech-chip{padding:0;border:none;background:none;font-size:14px;line-height:1.7;color:var(--text)}
     
@@ -135,13 +127,10 @@
       .nav-toggle{display:grid;place-items:center}
       .case-hero{padding-top:145px}
       .roadmap-vertical{gap:22px}
-      .roadmap-vertical::before{left:18px;transform:none}
-      .roadmap-vertical::after{left:18px;transform:translate(-50%,0)}
-      .roadmap-item{grid-template-columns:36px 1fr;min-height:auto;align-items:flex-start;gap:14px}
+      .roadmap-vertical::before{left:14px;transform:none}
+      .roadmap-item{grid-template-columns:30px 1fr;min-height:auto;align-items:flex-start;gap:14px}
       .roadmap-content{max-width:none}
-      .roadmap-item.left .roadmap-content,
-      .roadmap-item.right .roadmap-content{grid-column:2;justify-self:start;text-align:left;padding:0}
-      .roadmap-marker{grid-column:1;justify-self:center;width:24px;height:24px;box-shadow:0 0 0 5px rgba(255,215,0,.08);margin-top:4px}
+      .roadmap-marker{grid-column:1;justify-self:center;width:24px;height:24px;box-shadow:0 0 0 5px rgba(255,215,0,.08);margin-top:8px}
       .architecture-system{min-height:auto}
       .architecture-road{display:none}
       .architecture-agents{grid-template-columns:1fr}
@@ -211,8 +200,8 @@
   </header>
 
   <div class="case-hero">
-    <h1 class="case-title reveal">Мультиагентная <br> система для <span class="hi">SMM</span></h1>
-    <p class="case-lead reveal">К нам обратилось маркетинговое агентство (NDA), управляющее 23 Telegram-каналами разных тематик. Подготовка одного поста занимала у них около часа, что существенно ограничивало масштабирование</p>
+    <h1 class="case-title reveal">AI-платформа <br> для <span class="hi">Call Center</span></h1>
+    <p class="case-lead reveal">К нам обратился сервис доставки с 180+ операторами. На пике в линию поступало до 14 000 обращений в сутки, и команда не успевала закрывать SLA без перегруза смен.</p>
 
 
   </div>
@@ -221,33 +210,33 @@
 
   <article class="case-body">
     <div class="section-heading reveal" id="problem"><h2>Какую проблему мы обнаружили</h2></div>
-    <p class="reveal">SMM-специалист вручную проходил весь цикл: от идеи и структуры до финального оформления в Telegram. Один пост занимал около часа, а при 20+ каналах это превращалось в непрерывный ручной конвейер с высоким риском потери качества.</p>
-    <p class="reveal">Мы увидели, что узкое место — не в скорости человека, а в самой архитектуре процесса: одна роль одновременно выполняла несколько разных задач. <span class="problem-accent">Поэтому цель проекта логично вытекала из проблемы:</span> разделить этапы, автоматизировать цикл создания контента и зафиксировать единый стандарт качества без расширения штата.</p>
+    <p class="reveal">Оператор вручную проходил весь цикл: принять звонок, уточнить данные, открыть CRM, найти регламент, составить ответ и зафиксировать результат. Один диалог занимал в среднем 9 минут, а в часы пик очередь росла быстрее, чем команда успевала её обрабатывать.</p>
+    <p class="reveal">Ключевое узкое место было не в людях, а в процессе: один сотрудник переключался между несколькими системами и типами задач. <span class="problem-accent">Поэтому цель проекта была прямой:</span> разделить поток по ролям AI-агентов, ускорить ответы и сохранить единый стандарт качества без найма новых операторов.</p>
 
     <div class="block-sep"></div>
 
     <div class="section-heading reveal" id="solution"><h2>Решение</h2></div>
-    <p class="reveal"><strong>Мы заменили ручной сценарий последовательным агентным потоком, где каждый следующий шаг стартует только после валидного результата предыдущего.</strong></p>
+    <p class="reveal"><strong>Мы заменили ручной сценарий последовательным агентным потоком: каждый шаг запускается только после проверки предыдущего и возвращает структурированный результат в CRM.</strong></p>
     <div class="solution-flow reveal">
       <div class="flow-step">
         <span class="flow-dot"></span>
         <div>
-          <h3>Единый вход</h3>
-          <p>Система принимает задачу и переводит её в структурированный бриф, чтобы исключить разночтения на старте.</p>
+          <h3>Единая точка входа</h3>
+          <p>Телефония, чат и почта приходят в один оркестратор, который сразу определяет тип запроса и приоритет.</p>
         </div>
       </div>
       <div class="flow-step">
         <span class="flow-dot"></span>
         <div>
-          <h3>Поэтапная генерация</h3>
-          <p>Каждый агент отвечает только за свой тип работы, поэтому контекст не смешивается, а результат становится предсказуемым.</p>
+          <h3>Поэтапная обработка</h3>
+          <p>Каждый агент выполняет только свою функцию: извлекает данные клиента, подбирает сценарий и формирует корректный ответ.</p>
         </div>
       </div>
       <div class="flow-step">
         <span class="flow-dot"></span>
         <div>
-          <h3>Контроль качества на выходе</h3>
-          <p>Финальный этап выравнивает стиль и формат перед публикацией — это снижает ручные правки и стабилизирует качество.</p>
+          <h3>Контроль качества перед отправкой</h3>
+          <p>Перед ответом клиенту система проверяет соблюдение регламентов, tone of voice и полноту данных по заявке.</p>
         </div>
       </div>
     </div>
@@ -257,33 +246,63 @@
     <div class="section-heading reveal" id="architecture"><h2>Архитектура (цепочка агентов)</h2></div>
     <div class="architecture-system reveal" aria-label="Диаграмма мультиагентной архитектуры">
       <div class="architecture-agents">
-        <article class="agent-node agent-node--tl"><h4>Planner Agent</h4><p>Формирует логичную структуру и тезисы из входных данных.</p></article>
-        <article class="agent-node agent-node--bl"><h4>Operator Agent</h4><p>Создаёт основной текст по брифу без потери контекста.</p></article>
-        <article class="agent-node agent-node--tr"><h4>Formatter Agent</h4><p>Адаптирует стиль под Telegram и усиливает читаемость.</p></article>
-        <article class="agent-node agent-node--br"><h4>Editor Agent</h4><p>Проводит финальную валидацию тона и качества.</p></article>
+        <article class="agent-node agent-node--tl"><h4>Routing Agent</h4><p>Классифицирует обращение и направляет его в правильный сценарий обработки.</p></article>
+        <article class="agent-node agent-node--bl"><h4>Context Agent</h4><p>Собирает историю клиента из CRM, биллинга и логистики в единый контекст.</p></article>
+        <article class="agent-node agent-node--tr"><h4>Resolution Agent</h4><p>Формирует точный ответ и следующий шаг по регламенту для оператора или клиента.</p></article>
+        <article class="agent-node agent-node--br"><h4>QA Agent</h4><p>Проверяет ответ на соответствие SLA, политике сервиса и качеству коммуникации.</p></article>
       </div>
     </div>
 
     <div class="block-sep"></div>
 
     <div class="section-heading reveal" id="example"><h2>Пример использования</h2></div>
-    <p class="reveal"><strong>Ввод параметров:</strong> пользователь задаёт исходные данные — целевая аудитория, тема и задача поста.</p>
+    <p class="reveal"><strong>Сценарий:</strong> клиент звонит в поддержку и сообщает, что курьер опаздывает, а заказ отмечен как «в пути» уже 40 минут.</p>
+    <div class="roadmap-vertical reveal" aria-label="Roadmap обработки обращения">
+      <article class="roadmap-item">
+        <span class="roadmap-marker" data-step="1"></span>
+        <div class="roadmap-content">
+          <h4>Приём обращения</h4>
+          <p>Система распознаёт речь, фиксирует намерение «Задержка доставки» и привязывает запрос к профилю клиента.</p>
+        </div>
+      </article>
+      <article class="roadmap-item">
+        <span class="roadmap-marker" data-step="2"></span>
+        <div class="roadmap-content">
+          <h4>Сбор контекста</h4>
+          <p>AI подтягивает статус заказа, геопозицию курьера, обещанный интервал и прошлые обращения по клиенту.</p>
+        </div>
+      </article>
+      <article class="roadmap-item">
+        <span class="roadmap-marker" data-step="3"></span>
+        <div class="roadmap-content">
+          <h4>Подбор решения</h4>
+          <p>Resolution Agent предлагает 2 варианта: ускорить заказ через диспетчера или оформить компенсацию по политике.</p>
+        </div>
+      </article>
+      <article class="roadmap-item">
+        <span class="roadmap-marker" data-step="4"></span>
+        <div class="roadmap-content">
+          <h4>Проверка и ответ</h4>
+          <p>QA Agent валидирует текст и SLA, после чего оператор отправляет готовый ответ в один клик.</p>
+        </div>
+      </article>
+    </div>
 
     <div class="block-sep"></div>
 
     <div class="section-heading reveal" id="results"><h2>Результаты</h2></div>
     <div class="hero-results reveal" aria-label="Ключевые результаты">
       <div class="metric-card">
-        <div class="metric-value">x10</div>
-        <div class="metric-note">Подготовка поста: 50 → 5 минут</div>
+        <div class="metric-value">−92%</div>
+        <div class="metric-note">Среднее время ответа: 9:00 → 0:45</div>
       </div>
       <div class="metric-card">
-        <div class="metric-value">−80%</div>
-        <div class="metric-note">Ручной рутины в ежедневной работе</div>
+        <div class="metric-value">+37%</div>
+        <div class="metric-note">Больше обращений закрывается в рамках того же штата</div>
       </div>
       <div class="metric-card">
-        <div class="metric-value">+30%</div>
-        <div class="metric-note">Рост ERR за счёт качества контента</div>
+        <div class="metric-value">+24 п.п.</div>
+        <div class="metric-note">Рост CSAT после стандартизации ответов</div>
       </div>
     </div>
 
@@ -293,9 +312,9 @@
     <div class="tech-row reveal">
       <span class="tech-chip">Python 3.12</span>
       <span class="tech-chip">FastAPI</span>
-      <span class="tech-chip">Google Gemini</span>
-      <span class="tech-chip">Telegram Bot API</span>
-      <span class="tech-chip">Yandex Object Storage</span>
+      <span class="tech-chip">OpenAI API</span>
+      <span class="tech-chip">Asterisk</span>
+      <span class="tech-chip">PostgreSQL</span>
       <span class="tech-chip">Asyncio</span>
       <span class="tech-chip">Pydantic</span>
       <span class="tech-chip">Docker</span>
@@ -303,7 +322,7 @@
 
     <div class="cta-wrap reveal" id="cta">
       <h3>Обсудим вашу задачу</h3>
-      <p>Покажем, какие этапы можно автоматизировать в вашем процессе и где получить максимальный эффект по скорости и качеству.</p>
+      <p>Покажем, какие этапы поддержки можно автоматизировать, чтобы сократить очередь, снизить нагрузку на операторов и улучшить клиентский опыт.</p>
       <a href="#" class="cta-btn">Запросить разбор</a>
     </div>
   </article>
@@ -343,6 +362,14 @@
       });
     }, { threshold: 0.2, rootMargin: '-8% 0px -8% 0px' });
     architectureNodes.forEach((node) => architectureObs.observe(node));
+
+    const roadmapItems = document.querySelectorAll('.roadmap-item');
+    const roadmapObs = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.25, rootMargin: '0px 0px -12% 0px' });
+    roadmapItems.forEach((item) => roadmapObs.observe(item));
 
     (function () {
       const bg = document.getElementById('pageBg');
