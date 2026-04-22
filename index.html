@@ -120,11 +120,23 @@
     .tech-chip{padding:0;border:none;background:none;font-size:14px;line-height:1.7;color:var(--text)}
     
 
-    .cta-wrap{margin-top:86px;border:1px solid rgba(255,255,255,.16);border-radius:var(--radius);padding:44px 24px;text-align:center;background:linear-gradient(180deg,rgba(44,44,44,.9),rgba(0,0,0,.95))}
+    .cta-wrap{margin-top:86px;border:1px solid rgba(255,255,255,.16);border-radius:var(--radius);padding:44px 24px;text-align:center;background:rgba(18,18,18,.95)}
     .cta-wrap h3{font-size:clamp(26px,3vw,36px);line-height:1.15;margin-bottom:10px}
     .cta-wrap p{max-width:640px;margin:0 auto 20px;color:var(--muted)}
     .cta-btn{display:inline-block;padding:13px 26px;border-radius:999px;background:var(--accent);color:#000;font-weight:700;text-decoration:none;font-family:"Montserrat",sans-serif;transition:.2s}
     .cta-btn:hover{transform:translateY(-2px);box-shadow:0 0 22px var(--accent-glow)}
+
+    .modal-overlay{position:fixed;inset:0;z-index:240;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .25s ease}
+    .modal-overlay.open{opacity:1;pointer-events:auto}
+    .modal-card{width:min(100%,500px);max-height:calc(100vh - 40px);overflow:auto;border:1px solid rgba(255,255,255,.14);border-radius:16px;background:#060606;box-shadow:0 28px 60px rgba(0,0,0,.45);padding:34px 34px 30px}
+    .modal-close{margin-left:auto;display:grid;place-items:center;width:34px;height:34px;border:none;background:transparent;color:rgba(255,255,255,.62);font-size:34px;line-height:1;cursor:pointer}
+    .modal-title{font-size:42px;font-weight:700;line-height:1.1;letter-spacing:-.03em;margin-top:8px}
+    .modal-field{width:100%;background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,.16);color:var(--text);font-family:"Montserrat",sans-serif;font-size:18px;padding:20px 2px 14px;outline:none}
+    .modal-field::placeholder{color:rgba(255,255,255,.35)}
+    .modal-field:focus{border-bottom-color:rgba(255,215,0,.55)}
+    textarea.modal-field{min-height:118px;resize:vertical;padding-top:26px}
+    .modal-submit{margin-top:32px;width:100%;border:none;background:var(--accent);color:#000;font-family:"Montserrat",sans-serif;font-size:32px;font-weight:500;line-height:1.1;border-radius:0;padding:26px 12px 28px;cursor:pointer;transition:.2s}
+    .modal-submit:hover{filter:brightness(.96)}
 
     .reveal{opacity:0;transform:translateY(22px);transition:opacity .6s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1)}
     .reveal.visible{opacity:1;transform:translateY(0)}
@@ -154,6 +166,10 @@
       .agent-node{width:100%}
     }
     @media (max-width:640px){
+      .modal-card{padding:24px 18px 20px}
+      .modal-title{font-size:32px}
+      .modal-field{font-size:17px}
+      .modal-submit{font-size:24px;padding:20px 10px}
       .architecture-system{min-height:auto}
       .architecture-road{display:none}
       .architecture-agents{position:relative;display:grid;grid-template-columns:1fr;gap:14px}
@@ -366,9 +382,24 @@
     <div class="cta-wrap reveal" id="cta">
       <h3>Обсудим вашу задачу</h3>
       <p>Покажем, как автоматизировать обработку звонков, снизить ошибки ввода и ускорить цикл обработки заказов в вашем колл-центре.</p>
-      <a href="#" class="cta-btn">Запросить разбор</a>
+      <a href="#" class="cta-btn" id="openBriefBtn">Запросить разбор</a>
     </div>
   </article>
+
+  <div class="modal-overlay" id="briefModal" role="dialog" aria-modal="true" aria-labelledby="briefTitle">
+    <form class="modal-card">
+      <button class="modal-close" id="closeBriefBtn" aria-label="Закрыть форму" type="button">×</button>
+      <h2 class="modal-title" id="briefTitle">Далее давайте обсудим вашу задачу</h2>
+      <input class="modal-field" type="text" name="name" placeholder="Ваше имя"/>
+      <input class="modal-field" type="text" name="company" placeholder="Название компании"/>
+      <input class="modal-field" type="text" name="role" placeholder="Позиция в компании"/>
+      <input class="modal-field" type="text" name="team_size" placeholder="Размер команды"/>
+      <input class="modal-field" type="text" name="budget" placeholder="Бюджет"/>
+      <textarea class="modal-field" name="task" placeholder="Опишите вашу задачу"></textarea>
+      <input class="modal-field" type="text" name="contact" placeholder="Ваш контакт (@telegram_id / +7 (999) 123-45-67)"/>
+      <button class="modal-submit" type="submit">Отправить заявку</button>
+    </form>
+  </div>
 
   <script>
     const hdr = document.getElementById('hdr');
@@ -377,6 +408,10 @@
     const casesToggle = document.getElementById('casesToggle');
     const casesDropdown = document.getElementById('casesDropdown');
     const roadmap = document.querySelector('.roadmap-vertical');
+    const openBriefBtn = document.getElementById('openBriefBtn');
+    const briefModal = document.getElementById('briefModal');
+    const closeBriefBtn = document.getElementById('closeBriefBtn');
+    const briefForm = briefModal?.querySelector('form');
 
     window.addEventListener('scroll', () => {
       hdr.classList.toggle('scrolled', window.scrollY > 40);
@@ -390,6 +425,42 @@
       event.stopPropagation();
       const isOpen = casesDropdown.classList.toggle('open');
       casesToggle.setAttribute('aria-expanded', String(isOpen));
+    });
+
+    function closeBriefModal() {
+      if (!briefModal) return;
+      briefModal.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function openBriefModal() {
+      if (!briefModal) return;
+      briefModal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    openBriefBtn?.addEventListener('click', (event) => {
+      event.preventDefault();
+      openBriefModal();
+    });
+
+    closeBriefBtn?.addEventListener('click', closeBriefModal);
+
+    briefModal?.addEventListener('click', (event) => {
+      if (event.target === briefModal) {
+        closeBriefModal();
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        closeBriefModal();
+      }
+    });
+
+    briefForm?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      closeBriefModal();
     });
 
     document.addEventListener('click', (event) => {
