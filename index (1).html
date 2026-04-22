@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Мультиагентная система для SMM · Aivion</title>
-  <meta name="description" content="Кейс о том, как мы сократили производство Telegram-поста с ~60 минут до ~2–3 минут с мультиагентной архитектурой."/>
+  <title>AI-микросервис для автоматизации колл-центра · Aivion</title>
+  <meta name="description" content="Кейс о том, как AI-микросервис автоматизировал обработку звонков в колл-центре и снизил ошибки ввода на 70%."/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
@@ -101,10 +101,10 @@
     .step-dropdown p{font-size:13px;line-height:1.6;color:#D1D5DB;background:rgba(20,20,20,.95);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:12px 14px}
     .step-dropdown.open{max-height:220px;opacity:1;margin-top:10px}
 
-    .architecture-system{position:relative;max-width:920px;margin:28px auto 0}
+    .architecture-system{position:relative;max-width:100%;margin:28px auto 0}
     .architecture-road{display:none}
-    .architecture-agents{position:relative;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;z-index:3}
-    .agent-node{position:relative;width:100%;padding:18px 20px;border:1px solid rgba(255,255,255,.32);border-radius:14px;background:transparent;box-shadow:none;opacity:0;transform:translateY(26px) scale(.98);transition:opacity .55s ease,transform .55s ease}
+    .architecture-agents{position:relative;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;z-index:3}
+    .agent-node{position:relative;width:100%;padding:26px 28px;border:1px solid rgba(255,255,255,.32);border-radius:14px;background:rgba(255,255,255,.01);box-shadow:none;opacity:0;transform:translateY(26px) scale(.98);transition:opacity .55s ease,transform .55s ease}
     .agent-node.visible{opacity:1;transform:translateY(0) scale(1)}
     .agent-node h4{font-size:16px;color:var(--accent);margin-bottom:4px}
     .agent-node p{font-size:13px;line-height:1.6;color:var(--text);margin:0}
@@ -211,8 +211,8 @@
   </header>
 
   <div class="case-hero">
-    <h1 class="case-title reveal">Мультиагентная <br> система для <span class="hi">SMM</span></h1>
-    <p class="case-lead reveal">К нам обратилось маркетинговое агентство (NDA), управляющее 23 Telegram-каналами разных тематик. Подготовка одного поста занимала у них около часа, что существенно ограничивало масштабирование</p>
+    <h1 class="case-title reveal">AI-микросервис для <br> автоматизации <span class="hi">колл-центра</span></h1>
+    <p class="case-lead reveal">К нам обратился крупный сервис доставки и логистики (E-commerce, NDA), ежедневно обрабатывающий тысячи телефонных заказов. Из-за ошибок операторов при ручной фиксации данных часть доставок выполнялась некорректно или с задержками.</p>
 
 
   </div>
@@ -220,70 +220,108 @@
   <div class="section-divider"></div>
 
   <article class="case-body">
-    <div class="section-heading reveal" id="problem"><h2>Какую проблему мы обнаружили</h2></div>
-    <p class="reveal">SMM-специалист вручную проходил весь цикл: от идеи и структуры до финального оформления в Telegram. Один пост занимал около часа, а при 20+ каналах это превращалось в непрерывный ручной конвейер с высоким риском потери качества.</p>
-    <p class="reveal">Мы увидели, что узкое место — не в скорости человека, а в самой архитектуре процесса: одна роль одновременно выполняла несколько разных задач. <span class="problem-accent">Поэтому цель проекта логично вытекала из проблемы:</span> разделить этапы, автоматизировать цикл создания контента и зафиксировать единый стандарт качества без расширения штата.</p>
+    <div class="section-heading reveal" id="problem"><h2>Какую проблему мы выявили</h2></div>
+    <p class="reveal">Оператор одновременно общался с клиентом, фиксировал адрес и детали заказа, а затем вручную переносил данные в CRM. В режиме реального времени это вызывало потерю фокуса и критичные ошибки при вводе.</p>
+    <p class="reveal">Дополнительно отсутствовал прозрачный контроль качества звонков и единый формат хранения информации. <span class="problem-accent">Ключевой вывод:</span> проблема не в отдельных сотрудниках, а в модели работы, где человек выполняет несколько несовместимых задач одновременно.</p>
 
     <div class="block-sep"></div>
 
     <div class="section-heading reveal" id="solution"><h2>Решение</h2></div>
-    <p class="reveal"><strong>Мы заменили ручной сценарий последовательным агентным потоком, где каждый следующий шаг стартует только после валидного результата предыдущего.</strong></p>
+    <p class="reveal"><strong>Мы разработали AI-микросервис, который обрабатывает записи звонков, извлекает ключевые данные и автоматически передаёт их в CRM в структурированном виде.</strong></p>
     <div class="solution-flow reveal">
       <div class="flow-step">
         <span class="flow-dot"></span>
         <div>
-          <h3>Единый вход</h3>
-          <p>Система принимает задачу и переводит её в структурированный бриф, чтобы исключить разночтения на старте.</p>
+          <h3>Двухрежимная обработка</h3>
+          <p>Режим Address Only извлекает критические поля для заказа, а Full Transcript сохраняет полную расшифровку с ролями и таймкодами для контроля качества.</p>
         </div>
       </div>
       <div class="flow-step">
         <span class="flow-dot"></span>
         <div>
-          <h3>Поэтапная генерация</h3>
-          <p>Каждый агент отвечает только за свой тип работы, поэтому контекст не смешивается, а результат становится предсказуемым.</p>
+          <h3>Асинхронный пайплайн</h3>
+          <p>API сразу возвращает статус, задачи уходят в очередь, а воркеры обрабатывают аудио в фоне без блокировок под высокой нагрузкой.</p>
         </div>
       </div>
       <div class="flow-step">
         <span class="flow-dot"></span>
         <div>
-          <h3>Контроль качества на выходе</h3>
-          <p>Финальный этап выравнивает стиль и формат перед публикацией — это снижает ручные правки и стабилизирует качество.</p>
+          <h3>Контроль стоимости и отказоустойчивость</h3>
+          <p>Сервис считает стоимость по длительности и токенам, применяет retry-политику и остаётся устойчивым даже при деградации AI-провайдера.</p>
         </div>
       </div>
     </div>
 
     <div class="block-sep"></div>
 
-    <div class="section-heading reveal" id="architecture"><h2>Архитектура (цепочка агентов)</h2></div>
+    <div class="section-heading reveal" id="architecture"><h2>Архитектура решения</h2></div>
     <div class="architecture-system reveal" aria-label="Диаграмма мультиагентной архитектуры">
       <div class="architecture-agents">
-        <article class="agent-node agent-node--tl"><h4>Planner Agent</h4><p>Формирует логичную структуру и тезисы из входных данных.</p></article>
-        <article class="agent-node agent-node--bl"><h4>Operator Agent</h4><p>Создаёт основной текст по брифу без потери контекста.</p></article>
-        <article class="agent-node agent-node--tr"><h4>Formatter Agent</h4><p>Адаптирует стиль под Telegram и усиливает читаемость.</p></article>
-        <article class="agent-node agent-node--br"><h4>Editor Agent</h4><p>Проводит финальную валидацию тона и качества.</p></article>
+        <article class="agent-node agent-node--tl"><h4>1. Двухрежимная обработка</h4><p>Address Only — для операционного ввода заказа, Full Transcript — для полной аналитики и контроля качества звонков.</p></article>
+        <article class="agent-node agent-node--bl"><h4>2. Асинхронная обработка</h4><p>Очереди и фоновые воркеры позволяют обрабатывать тысячи звонков без блокировок и масштабироваться горизонтально.</p></article>
+        <article class="agent-node agent-node--tr"><h4>3. Финансовая логика и retry</h4><p>Гибридный анализ аудио, расчёт затрат и экспоненциальные повторы защищают процесс от сбоев и перерасхода.</p></article>
+        <article class="agent-node agent-node--br"><h4>4. Мониторинг через Telegram</h4><p>Telegram-бот показывает баланс, статус ключей и визуальную аналитику, чтобы управлять системой без доступа к инфраструктуре.</p></article>
       </div>
     </div>
 
     <div class="block-sep"></div>
 
     <div class="section-heading reveal" id="example"><h2>Пример использования</h2></div>
-    <p class="reveal"><strong>Ввод параметров:</strong> пользователь задаёт исходные данные — целевая аудитория, тема и задача поста.</p>
+    <p class="reveal"><strong>Ниже — практический roadmap обработки звонка сверху вниз:</strong> от загрузки записи до автоматического занесения данных в CRM и последующего аудита качества.</p>
+
+    <div class="roadmap-vertical reveal" aria-label="Roadmap обработки звонка">
+      <article class="roadmap-item left">
+        <div class="roadmap-content">
+          <h4>01 · Запуск после звонка</h4>
+          <p>После завершения разговора аудиозапись автоматически отправляется в AI-микросервис из телефонии.</p>
+        </div>
+        <span class="roadmap-marker"></span>
+      </article>
+      <article class="roadmap-item right">
+        <span class="roadmap-marker"></span>
+        <div class="roadmap-content">
+          <h4>02 · Приём задачи API</h4>
+          <p>API принимает задачу, валидирует вход и мгновенно возвращает статус обработки без ожидания результата.</p>
+        </div>
+      </article>
+      <article class="roadmap-item left">
+        <div class="roadmap-content">
+          <h4>03 · Фоновая обработка</h4>
+          <p>Воркеры извлекают адрес, детали заказа и формируют структурированный JSON по единому формату.</p>
+        </div>
+        <span class="roadmap-marker"></span>
+      </article>
+      <article class="roadmap-item right">
+        <span class="roadmap-marker"></span>
+        <div class="roadmap-content">
+          <h4>04 · Автозапись в CRM</h4>
+          <p>Готовые данные автоматически синхронизируются с CRM без участия оператора на этапе ввода.</p>
+        </div>
+      </article>
+      <article class="roadmap-item left">
+        <div class="roadmap-content">
+          <h4>05 · Контроль качества</h4>
+          <p>По необходимости сохраняется полный транскрипт для разбора диалогов, аудита и обучения команды.</p>
+        </div>
+        <span class="roadmap-marker"></span>
+      </article>
+    </div>
 
     <div class="block-sep"></div>
 
     <div class="section-heading reveal" id="results"><h2>Результаты</h2></div>
     <div class="hero-results reveal" aria-label="Ключевые результаты">
       <div class="metric-card">
-        <div class="metric-value">x10</div>
-        <div class="metric-note">Подготовка поста: 50 → 5 минут</div>
+        <div class="metric-value">x4</div>
+        <div class="metric-note">Обработка заказа: ~2 минуты → ~30 секунд</div>
       </div>
       <div class="metric-card">
-        <div class="metric-value">−80%</div>
-        <div class="metric-note">Ручной рутины в ежедневной работе</div>
+        <div class="metric-value">−70%</div>
+        <div class="metric-note">Ошибок ввода за счёт исключения ручного ввода и валидации</div>
       </div>
       <div class="metric-card">
-        <div class="metric-value">+30%</div>
-        <div class="metric-note">Рост ERR за счёт качества контента</div>
+        <div class="metric-value">2</div>
+        <div class="metric-note">Сотрудника уволены за несоблюдение этического кодекса</div>
       </div>
     </div>
 
@@ -291,19 +329,20 @@
 
     <div class="section-heading reveal" id="stack"><h2>Стек технологий</h2></div>
     <div class="tech-row reveal">
-      <span class="tech-chip">Python 3.12</span>
+      <span class="tech-chip">Python</span>
       <span class="tech-chip">FastAPI</span>
-      <span class="tech-chip">Google Gemini</span>
+      <span class="tech-chip">Google Generative AI</span>
       <span class="tech-chip">Telegram Bot API</span>
-      <span class="tech-chip">Yandex Object Storage</span>
+      <span class="tech-chip">PostgreSQL</span>
       <span class="tech-chip">Asyncio</span>
       <span class="tech-chip">Pydantic</span>
       <span class="tech-chip">Docker</span>
+      <span class="tech-chip">S3-хранилище</span>
     </div>
 
     <div class="cta-wrap reveal" id="cta">
       <h3>Обсудим вашу задачу</h3>
-      <p>Покажем, какие этапы можно автоматизировать в вашем процессе и где получить максимальный эффект по скорости и качеству.</p>
+      <p>Покажем, как автоматизировать обработку звонков, снизить ошибки ввода и ускорить цикл обработки заказов в вашем колл-центре.</p>
       <a href="#" class="cta-btn">Запросить разбор</a>
     </div>
   </article>
@@ -335,6 +374,16 @@
     }, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
 
     reveals.forEach(el => obs.observe(el));
+
+    const roadmapItems = document.querySelectorAll('.roadmap-item');
+    const roadmapObs = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.2, rootMargin: '0px 0px -15% 0px' });
+    roadmapItems.forEach((item) => roadmapObs.observe(item));
 
     const architectureNodes = document.querySelectorAll('.architecture-system .agent-node');
     const architectureObs = new IntersectionObserver((entries) => {
